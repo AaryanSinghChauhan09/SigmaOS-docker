@@ -1,110 +1,42 @@
-// SPDX-License-Identifier: Apache-2.0
-//! SigmaOS-docker - Container management
-//! Part of SigmaOS multi-repository architecture
+//! SigmaOS-docker - SigmaOS Component
+//!
+//! Cloud and infrastructure component for SigmaOS.
 
-#![no_std]
+use anyhow::Result;
+use log::info;
+use serde::{Deserialize, Serialize};
 
-use core::result::Result;
-
-/// Container errors
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum DockerError {
-    ContainerNotFound,
-    ImageNotFound,
-    PermissionDenied,
-    NetworkError,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Config {
+    pub enabled: bool,
+    pub cluster_mode: bool,
 }
 
-/// Container state
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum ContainerState {
-    Running,
-    Stopped,
-    Paused,
-    Restarting,
-    Dead,
-}
-
-/// Container
-#[derive(Debug, Clone)]
-pub struct Container {
-    name: &'static str,
-    image: &'static str,
-    state: ContainerState,
-}
-
-impl Container {
-    pub fn new(name: &'static str, image: &'static str) -> Self {
-        Self {
-            name,
-            image,
-            state: ContainerState::Stopped,
-        }
-    }
-
-    pub fn name(&self) -> &'static str {
-        self.name
-    }
-
-    pub fn image(&self) -> &'static str {
-        self.image
-    }
-
-    pub fn state(&self) -> ContainerState {
-        self.state
-    }
-}
-
-/// Docker container manager
-pub struct Docker {
-    containers: Option<&'static [Container]>,
-}
-
-impl Docker {
-    pub fn new() -> Self {
-        Self { containers: None }
-    }
-
-    /// Run a container
-    pub fn run(&mut self, container: Container) -> Result<(), DockerError> {
-        Ok(())
-    }
-
-    /// Stop a container
-    pub fn stop(&mut self, container_name: &'static str) -> Result<(), DockerError> {
-        Ok(())
-    }
-
-    /// Pull an image
-    pub fn pull(&mut self, image_name: &'static str) -> Result<(), DockerError> {
-        Ok(())
-    }
-
-    /// List containers
-    pub fn ps(&self) -> Result<Vec<&'static str>, DockerError> {
-        Ok(Vec::new())
-    }
-}
-
-impl Default for Docker {
+impl Default for Config {
     fn default() -> Self {
-        Self::new()
+        Self { enabled: true, cluster_mode: false }
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub struct docker {
+    config: Config,
+}
 
-    #[test]
-    fn test_container_creation() {
-        let container = Container::new("test", "alpine");
-        assert_eq!(container.name(), "test");
+impl docker {
+    pub fn new(config: Config) -> Self {
+        Self { config }
     }
 
-    #[test]
-    fn test_docker_creation() {
-        let docker = Docker::new();
-        assert!(docker.run(Container::new("test", "alpine")).is_ok());
+    pub fn initialize(&mut self) -> Result<()> {
+        info!("Initializing SigmaOS-docker");
+        if self.config.cluster_mode {
+            info!("Cluster mode enabled");
+        }
+        Ok(())
+    }
+
+    pub fn deploy(&mut self) -> Result<()> {
+        info!("Deploying SigmaOS-docker");
+        Ok(())
     }
 }
