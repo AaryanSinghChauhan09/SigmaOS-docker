@@ -3,6 +3,7 @@
 //! Models Docker's container platform: containers, images, volumes,
 //! networks, build system, compose stacks, and swarm services for
 //! the SigmaOS desktop.
+#![forbid(unsafe_code)]
 
 pub mod container;
 pub mod image;
