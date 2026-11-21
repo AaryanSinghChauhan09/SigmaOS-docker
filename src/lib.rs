@@ -129,3 +129,6 @@ mod tests {
         assert!(!n.is_empty());
     }
 }
+
+/// Module extracted from the SigmaOS-system monolith.
+pub mod omarchy_docker_rootless_engine;
